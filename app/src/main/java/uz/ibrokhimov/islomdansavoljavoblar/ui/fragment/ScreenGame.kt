@@ -1,5 +1,6 @@
 package uz.ibrokhimov.islomdansavoljavoblar.ui.fragment
 
+import android.os.Handler
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -8,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import uz.ibrokhimov.islomdansavoljavoblar.R
 import uz.ibrokhimov.islomdansavoljavoblar.core.base.BaseFragment
 import uz.ibrokhimov.islomdansavoljavoblar.core.data.Data
-import uz.ibrokhimov.islomdansavoljavoblar.core.model.SavolModel
 import uz.ibrokhimov.islomdansavoljavoblar.databinding.ScreenGameBinding
 
 
@@ -40,38 +40,59 @@ class ScreenGame : BaseFragment() {
             val textView = binding.answerGroup.getChildAt(i) as TextView
 
             textView.setOnClickListener {
-                val userAnswer = textView.text.toString()
+                val userAnswer = data[position].javoblar[i]
 
                 if (isChecked) {
                     if (userAnswer == data[position].javob) {
                         isChecked = false
-                        textView.setBackgroundResource(R.drawable.shape_of_true)
+                        textView.setBackgroundResource(R.drawable.shape_of_start_btn)
                         if (!isChecked) {
-                            binding.nextBtn.setOnClickListener {
-                               positionIncreament()
-                                coin += 5
-                               loadView()
-                            }
+
+                            // wait for check
+                            Handler().postDelayed(
+                                {
+                                    positionIncreament()
+                                    coin += 5
+                                    loadView()
+                                }, 3_000
+                            )
+
+                            Handler().postDelayed({
+                                textView.setBackgroundResource(R.drawable.shape_of_true)
+                            }, 1_500)
+
+
                         }
 
-                    }
-                    else {
+                    } else {
                         isChecked = false
-                        textView.setBackgroundResource(R.drawable.shape_of_false)
-                        binding.nextBtn.setOnClickListener {
+                        textView.setBackgroundResource(R.drawable.shape_of_start_btn)
+
+
+                        // wait for check
+                        Handler().postDelayed({
                             if (!isChecked) {
                                 positionIncreament()
                                 loadView()
                             }
-                        }
+                        }, 3_000)
+
+                        // false answer color
+                        Handler().postDelayed({
+                            if (!isChecked) {
+                                textView.setBackgroundResource(R.drawable.shape_of_false)
+                            }
+                        }, 1_500)
+
                     }
                 }
             }
         }
-
         binding.changeQuestion.setOnClickListener {
 
             if (coin >= 10) {
+                coin -= 10
+                binding.winCoin.text = "Yutuq: $coin"
                 questionSize++
                 positionIncreament()
                 loadView()
@@ -84,6 +105,13 @@ class ScreenGame : BaseFragment() {
             }
 
         }
+
+        binding.halfBtn.setOnClickListener {
+
+
+
+        }
+
     }
 
 
@@ -108,8 +136,6 @@ class ScreenGame : BaseFragment() {
         binding.questionCount.text = "Savol: ${position + 1}/15"
 
     }
-
-
 
 
 }

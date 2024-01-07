@@ -4,8 +4,6 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import uz.ibrokhimov.islomdansavoljavoblar.core.base.BaseFragment
 import uz.ibrokhimov.islomdansavoljavoblar.databinding.ScreenStartBinding
-import uz.ibrokhimov.quizislamic.core.base.BaseFragment
-import uz.ibrokhimov.quizislamic.databinding.ScreenStartBinding
 
 class ScreenStart : BaseFragment() {
     private val binding by lazy { ScreenStartBinding.inflate(layoutInflater) }
